@@ -1,8 +1,14 @@
 import requests
 from bs4 import BeautifulSoup
 import re
+import sys
 
-URL = 'https://hodinky.heureka.cz/casio-a700weg-9a/'
+# saves shell argument into URL var
+URL = sys.argv[1]
+
+if "http" not in URL or "https" not in URL:
+    print("Please enter a valid URL (example: https://website.dk/)")
+    sys.exit()
 
 headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.117 Safari/537.36"
