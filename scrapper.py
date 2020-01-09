@@ -2,6 +2,11 @@ import requests
 from bs4 import BeautifulSoup
 import re
 import sys
+import string
+
+print("Heureka.cz Price Scrapper - (c) 2020 Andrea Petriku")
+print("Usage: python scrapper.py <http[s]://<product>.heureka.cz/product-name-as-found-by-google>")
+print()
 
 # saves shell argument into URL var
 URL = sys.argv[1]
@@ -15,22 +20,61 @@ headers = {
 }
 
 stranka = requests.get(URL, headers=headers)
-
 soup = BeautifulSoup(stranka.content, 'html.parser')
+vycuc = soup.findAll(text=re.compile("Kč"))
 
-# print(soup.prettify())
+# remove unwanted chars and print product_name
+product_name = re.sub(r" od .*$", "", vycuc[0])
+print("Product name:", product_name)
 
-# def count_records(search_word):
-#     scrapped_text = soup.get_text()
-#     scrapped_lower = scrapped_text.lower()
-#
-#     word_orig = search_word
-#     word_low = word_orig.lower()
-#
-#     print("The word", word_low, "is present", scrapped_lower.count(word_low), "times in the file.")
-#
-# count_records("CASIO")
-# print(soup)
+# prices start at 3th item in list and end at -1st place
+prices = vycuc[3:-1]
 
-a = soup.findAll(text=re.compile("Kč"))
-print(a)
+# print(vycuc)
+
+new_list = []
+for i in range(len(prices)):
+    value = prices[i].strip(' Kč')
+    new_list.append(value)
+
+# remove xx\xa0 records
+for unwanted in new_list:
+    if "\xa0" in unwanted:
+        new_list.remove(unwanted)
+
+# remove spaces
+new_list2 = []
+for i in range(len(new_list)):
+    a = re.sub(r"\s+", "", new_list[i])
+    new_list2.append(a)
+
+print(new_list2)
+
+# remove anything other than prices
+rec_index = 0
+try:
+    for record in new_list2:
+        for letter in record:
+            for char in range(10):
+                end_of_record = 0
+                print("letter:", letter, "char:", char)
+                if letter == str(char):
+                    print("letter:", letter, "char:", char)
+                    print("letter == char .. ok")
+                    break
+                else:
+                    break
+
+            print("end of record")
+            end_or_record = 1
+            print("popping: ", new_list2[rec_index])
+            new_list2.pop(rec_index)
+
+    rec_index += 1
+except IndexError:
+    pass
+
+print(new_list2)
+
+new_list2.sort()
+print("The lowest price is:", new_list2[0], "CZK")
