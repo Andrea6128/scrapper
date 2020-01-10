@@ -51,12 +51,16 @@ for index_number in range(len(shops)):
     name_price_line = shops[str(index_number)]
     prices_list.append(name_price_line['price'])
 
-prices_list.sort()
-lowest_price = prices_list[0]
+prices_list_float = []
+for price in prices_list:
+    prices_list_float.append(float(price))
+
+prices_list_float.sort()
+lowest_price = prices_list_float[0]
 
 for index_number in range(len(shops)):
     name_price_line = shops[str(index_number)]
-    if name_price_line['price'] == lowest_price:
+    if name_price_line['price'] == str(lowest_price)+'0':
         shop_name = name_price_line['name']
 
 print("The lowest price:", lowest_price, "CZK")
