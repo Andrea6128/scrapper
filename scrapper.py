@@ -2,10 +2,11 @@ import requests
 from bs4 import BeautifulSoup
 import re
 import sys
-import string
 import json
 
-print("Heureka.cz Price Scrapper v0.5 - (c) 2020 Andrea Petriku")
+
+# Scrapper
+print("Heureka.cz Price Scrapper v0.6 - (c) 2020 Andrea Petriku")
 print("Usage: python scrapper.py <http[s]://<product>.heureka.cz/product-name-as-found-by-google>")
 print()
 
@@ -33,7 +34,7 @@ headers = {
 
 stranka = requests.get(URL, headers=headers)
 soup = BeautifulSoup(stranka.content, 'html.parser')
-# vycuc = soup.findAll(text=re.compile("Kč"))
+
 nibble = soup.find(text=re.compile("__advert_product_info = {")) # find specified string
 nibble_stripped1 = nibble.strip("var __advert_product_info = ") # cut this string out
 nibble_stripped2 = nibble_stripped1.strip(";") # cut ';'
